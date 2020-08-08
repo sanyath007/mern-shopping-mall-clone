@@ -15,6 +15,7 @@ const continens = [
   { key: 7, value: 'Antarctica' },
 ]
 const UploadProductPage = () => {
+  const [images, setImages] = useState([]);
   const [values, setValues] = useState({
     title: '',
     description: '',
@@ -36,6 +37,11 @@ const UploadProductPage = () => {
     console.log(values);
   }
 
+  const updateImage = newImage => {
+    console.log(newImage);
+    setImages(newImage);
+  }
+
   return (
     <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -43,7 +49,8 @@ const UploadProductPage = () => {
       </div>
 
       <Form onSubmit={handleSubmit}>
-        <FileUpload />
+        {/* Dropzone */}
+        <FileUpload refreshFunction={updateImage} />
 
         <label>Title</label>
         <Input type="text" value={values.title} name="title" onChange={handleChange} /><br/><br/>
