@@ -13,13 +13,22 @@ const FileUpload = (props) => {
     }
     formData.append("file", files[0]);
 
-    axios.post('/api/product/uploadImage', formData, config)
+    axios.post('/api/products/uploadImage', formData, config)
       .then(res => {
         setImages([...images, res.data.image]);
         props.refreshFunction([...images, res.data.image]);
       })
       .catch(err => console.log(err));
   };
+
+  const onDelete = image => {
+    const currentIndex = images.indexOf(image);
+    const newImages = images;
+
+    newImages.splice(currentIndex, 1);
+    setImages(newImages);
+    props.refreshFunction(newImages);
+  }
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -36,12 +45,14 @@ const FileUpload = (props) => {
       </Dropzone>
 
       <div style={{ display: 'flex', width: '350px', height: '240px', overflowX: 'scroll' }}>
-        <div>
-          <img
-            src={ `http://localhost:5000/${images}` }
-            style={{ width: '100%', height: '100%', minWidth: '300px' }}
-          />
-        </div>
+        { images.map((image, index) => (
+          <div onClick={ () => onDelete(image)} key={image}>
+            <img
+              src={ `http://localhost:5000/${image}` }
+              style={{ width: '100%', height: '100%', minWidth: '300px' }}
+            />
+          </div>
+        ))}
       </div>
     </div>
   )

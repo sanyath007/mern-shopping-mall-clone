@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Button, Form, message, Input, Icon } from 'antd';
 import FileUpload from '../../utils/FileUpload';
+import axios from 'axios';
 
 const { Title } = Typography;
 const { TextArea } = Input;
 
-const continens = [
+const continents = [
   { key: 1, value: 'Africa' },
   { key: 2, value: 'Europe' },
   { key: 3, value: 'Asia' },
@@ -14,9 +15,9 @@ const continens = [
   { key: 6, value: 'Australia' },
   { key: 7, value: 'Antarctica' },
 ]
-const UploadProductPage = () => {
+const UploadProductPage = props => {
   const [images, setImages] = useState([]);
-  const [values, setValues] = useState({
+  const [product, setProduct] = useState({
     title: '',
     description: '',
     price: 0,
@@ -25,21 +26,29 @@ const UploadProductPage = () => {
 
   const handleChange = e => {
     const { name, value } = e.target;
-    console.log('name is ', name);
-    console.log('value is ', value);
-
-    setValues({ ...values, [name]: value })
+    setProduct({ ...product, [name]: value })
   }
 
   const handleSubmit = e => {
     e.preventDefault();
     
-    console.log(values);
+    const newProduct = {
+      writer: props.user.userData._id,
+      images,
+      ...product
+    };
+    console.log(newProduct);
+
+    axios.post('/api/products', product)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
   }
 
-  const updateImage = newImage => {
-    console.log(newImage);
-    setImages(newImage);
+  const updateImage = newImages => {
+    console.log(newImages);
+    setImages(newImages);
   }
 
   return (
@@ -53,21 +62,21 @@ const UploadProductPage = () => {
         <FileUpload refreshFunction={updateImage} />
 
         <label>Title</label>
-        <Input type="text" value={values.title} name="title" onChange={handleChange} /><br/><br/>
+        <Input type="text" value={product.title} name="title" onChange={handleChange} /><br/><br/>
 
         <label>Description</label>
-        <TextArea type="text" value={values.description} name="description" onChange={handleChange} /><br/><br/>
+        <TextArea type="text" value={product.description} name="description" onChange={handleChange} /><br/><br/>
 
         <label>Price</label>
-        <Input type="number" value={values.price} name="price" onChange={handleChange} /><br/><br/>
+        <Input type="number" value={product.price} name="price" onChange={handleChange} /><br/><br/>
 
-        <select name="continens" onChange={handleChange}>
-          { continens.map(item => (
+        <select name="continents" onChange={handleChange}>
+          { continents.map(item => (
             <option key={item.key} value={item.key}>{item.value}</option>
           ))}
         </select><br/><br/>
 
-        <Button type="submit">Submit</Button>
+        <Button onClick={handleSubmit}>Submit</Button>
       </Form>
     </div>
   )
