@@ -7,13 +7,13 @@ const { Title } = Typography;
 const { TextArea } = Input;
 
 const continents = [
-  { key: 1, value: 'Africa' },
-  { key: 2, value: 'Europe' },
-  { key: 3, value: 'Asia' },
-  { key: 4, value: 'North America' },
-  { key: 5, value: 'South America' },
-  { key: 6, value: 'Australia' },
-  { key: 7, value: 'Antarctica' },
+  { key: 1, value: 'ภาคกลาง' },
+  { key: 2, value: 'ภาคเหนือ' },
+  { key: 3, value: 'ภาคอีสาน' },
+  { key: 4, value: 'ภาคตะวันออก' },
+  { key: 5, value: 'ภาคตะวันตก' },
+  { key: 6, value: 'ภาคใต้' },
+  { key: 7, value: 'กรุงเทพและปริมณฑล' },
 ]
 const UploadProductPage = props => {
   const [images, setImages] = useState([]);
@@ -37,11 +37,11 @@ const UploadProductPage = props => {
       images,
       ...product
     };
-    console.log(newProduct);
 
-    axios.post('/api/products', product)
+    axios.post('/api/products', newProduct)
       .then(res => {
         console.log(res);
+        props.history.push('/');
       })
       .catch(err => console.log(err));
   }

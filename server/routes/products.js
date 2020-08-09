@@ -29,9 +29,9 @@ var upload = multer({ storage: storage }).single("file")
 //=================================
 
 router.post("/", auth, (req, res) => {
-    product = new Product(req.body);
+    const product = new Product(req.body);
     product.save(err => {
-        if(err) return res.status(500).json({success: false});
+        if(err) return res.status(400).json({success: false});
 
         return res.json({ success: true, product })
     })
@@ -43,6 +43,27 @@ router.post("/uploadImage", auth, (req, res) => {
 
         return res.json({ success: true, image: res.req.file.path, fileName: res.req.file.file })
     });
+});
+
+router.get("/", auth, (req, res) => {
+    let { order, sortBy, limit, skip } = req.body;
+
+    order = order ? order : "desc";
+    sortBy = sortBy ? sortBy : "_id";
+    limit = limit ? parseInt(limit) : 10;
+    skip = parseInt(skip);
+
+    Product
+        .find()
+        .populate("writer")
+        .sort([[sortBy, order]])
+        .skip(skip)
+        .limit(limit)
+        .exec((err, products) => {
+            if(err) return res.status(400).json({ success: false, err })
+
+            return res.status(200).json({ success: true, products })
+        });
 });
 
 module.exports = router;
