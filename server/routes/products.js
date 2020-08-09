@@ -45,16 +45,34 @@ router.post("/uploadImage", auth, (req, res) => {
     });
 });
 
-router.get("/", auth, (req, res) => {
-    let { order, sortBy, limit, skip } = req.body;
+router.get("/", (req, res) => {
+    Product
+        .find()
+        .exec((err, products) => {
+            if(err) return res.status(400).json({ success: false, err })
+
+            return res.status(200).json({ success: true, products })
+        });
+});
+
+router.post("/getProducts", (req, res) => {
+    let { order, sortBy, limit, skip, filters } = req.body;
 
     order = order ? order : "desc";
     sortBy = sortBy ? sortBy : "_id";
     limit = limit ? parseInt(limit) : 10;
     skip = parseInt(skip);
 
+    let findAgs = {}
+    if(filters) {
+        for(key in filters) {
+            if(filters[key].length > 0) findAgs[key] = filters[key];
+        }
+    }
+    console.log(findAgs);
+
     Product
-        .find()
+        .find(findAgs)
         .populate("writer")
         .sort([[sortBy, order]])
         .skip(skip)

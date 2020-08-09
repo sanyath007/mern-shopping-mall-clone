@@ -14,7 +14,8 @@ const continents = [
   { key: 5, value: 'ภาคตะวันตก' },
   { key: 6, value: 'ภาคใต้' },
   { key: 7, value: 'กรุงเทพและปริมณฑล' },
-]
+];
+
 const UploadProductPage = props => {
   const [images, setImages] = useState([]);
   const [product, setProduct] = useState({

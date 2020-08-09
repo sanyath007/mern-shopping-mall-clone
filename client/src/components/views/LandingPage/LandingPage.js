@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { Icon, Col, Row, Card } from "antd";
 import axios from 'axios';
 import ImageSlider from '../../utils/ImageSlider';
+import FilterCheckbox from './Filters/Checkbox'
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(8);
+  const [filters, setFilters] = useState({
+    continents: [],
+    price: []
+  });
   const { Meta } = Card;
 
   useEffect(() => {
@@ -18,11 +23,10 @@ const LandingPage = () => {
     getProduct(params);
   }, []);
   
-  const getProduct = (params) => {
-    axios.get("/api/products", params)
+  const getProduct = params => {
+    axios.post("/api/products/getProducts", params)
       .then(res => {
         if(res.data.success) {
-          console.log(res);
           setProducts(res.data.products)
         }
       })
@@ -30,13 +34,26 @@ const LandingPage = () => {
   }
 
   const handleLoadMore = () => {
-    console.log(skip);
     setSkip(skip + limit);
-    console.log(skip);
     
     const params = {
-      skip,
+      skip: skip + limit,
       limit
+    };
+
+    getProduct(params);
+  }
+
+  const handleFilter = (flts, category) => {
+    console.log(flts);
+    const newFilters = {...filters, [category]: flts};
+    setFilters(newFilters);
+    setSkip(0);
+    
+    const params = {
+      skip: 0,
+      limit,
+      filters: newFilters
     };
 
     getProduct(params);
@@ -59,6 +76,8 @@ const LandingPage = () => {
         <h2>Let's Travel Anywhere <Icon type="rocket" /></h2>
 
         {/* Filter */}
+        <FilterCheckbox handleFilter={filters => handleFilter(filters, "continents")} /><br/>
+
         {/* Search */}
 
         { products.length === 0 
