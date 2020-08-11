@@ -57,16 +57,19 @@ router.get("/", (req, res) => {
 
 router.post("/getProducts", (req, res) => {
     let { order, sortBy, limit, skip, filters } = req.body;
-
+    
     order = order ? order : "desc";
     sortBy = sortBy ? sortBy : "_id";
     limit = limit ? parseInt(limit) : 10;
     skip = parseInt(skip);
-
+    console.log('limit: ', limit);
+    
     let findAgs = {}
     if(filters) {
         for(key in filters) {
-            if(filters[key].length > 0) findAgs[key] = filters[key];
+            if(filters[key].length > 0) {
+                findAgs[key] = (key === "price") ? { $gte: filters[key][0], $lte: filters[key][1] } : filters[key];
+            }
         }
     }
     console.log(findAgs);

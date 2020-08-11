@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Collapse, Checkbox } from 'antd';
+import { Col, Collapse, Checkbox } from 'antd';
 
 const { Panel } = Collapse;
 const continents = [
@@ -32,7 +32,7 @@ const FilterCheckbox = props => {
   return (
     <div>
       <Collapse defaultActiveKey={[0]}>
-        <Panel key={1}>
+        <Panel header="Regions" key={1}>
           {continents.map((item, index) => (
             <Fragment key={item._id}>
               <Checkbox

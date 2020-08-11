@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Icon, Col, Row, Card } from "antd";
 import axios from 'axios';
 import ImageSlider from '../../utils/ImageSlider';
-import FilterCheckbox from './Filters/Checkbox'
+import FilterCheckbox from './Filters/CheckBox'
+import FilterRadioBox from './Filters/RadioBox'
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
@@ -46,7 +47,9 @@ const LandingPage = () => {
 
   const handleFilter = (flts, category) => {
     console.log(flts);
-    const newFilters = {...filters, [category]: flts};
+    let newFilters = {};
+    newFilters = {...filters, [category]: flts};
+
     setFilters(newFilters);
     setSkip(0);
     
@@ -75,10 +78,17 @@ const LandingPage = () => {
       <div style={{ textAlign: 'center' }}>
         <h2>Let's Travel Anywhere <Icon type="rocket" /></h2>
 
-        {/* Filter */}
-        <FilterCheckbox handleFilter={filters => handleFilter(filters, "continents")} /><br/>
+        <Row gutter={[16, 16]}>
+          {/* Filter */}
+          <Col lg={12} xs={24}>
+            <FilterCheckbox handleFilter={filters => handleFilter(filters, "continents")} /><br/>
+          </Col>
 
-        {/* Search */}
+          {/* Search */}
+          <Col lg={12} xs={24}>
+            <FilterRadioBox handleFilter={filters => handleFilter(filters, "price")} />
+          </Col>
+        </Row>
 
         { products.length === 0 
             ? (
@@ -87,11 +97,9 @@ const LandingPage = () => {
               </div>
             )
             : (
-              <div>
-                <Row gutter={[16, 16]}>
-                  {renderCard}
-                </Row>
-              </div>
+              <Row gutter={[16, 16]}>
+                {renderCard}
+              </Row>
             )
         }
 
