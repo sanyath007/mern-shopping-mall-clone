@@ -56,7 +56,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/getProducts", (req, res) => {
-    let { order, sortBy, limit, skip, filters } = req.body;
+    let { order, sortBy, limit, skip, filters, searchText } = req.body;
     
     order = order ? order : "desc";
     sortBy = sortBy ? sortBy : "_id";
@@ -72,19 +72,36 @@ router.post("/getProducts", (req, res) => {
             }
         }
     }
-    console.log(findAgs);
-
-    Product
+    console.log('findAgs :', findAgs);
+    
+    if(searchText) {
+        console.log("searchText :", searchText);
+        Product
         .find(findAgs)
+        .find({ $text: { $search: searchText }})
         .populate("writer")
         .sort([[sortBy, order]])
         .skip(skip)
         .limit(limit)
         .exec((err, products) => {
             if(err) return res.status(400).json({ success: false, err })
-
+            
             return res.status(200).json({ success: true, products })
         });
+    } else {
+        console.log("terms are null");
+        Product
+            .find(findAgs)
+            .populate("writer")
+            .sort([[sortBy, order]])
+            .skip(skip)
+            .limit(limit)
+            .exec((err, products) => {
+                if(err) return res.status(400).json({ success: false, err })
+    
+                return res.status(200).json({ success: true, products })
+            });
+    }
 });
 
 module.exports = router;

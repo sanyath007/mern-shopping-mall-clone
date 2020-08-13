@@ -4,6 +4,7 @@ import axios from 'axios';
 import ImageSlider from '../../utils/ImageSlider';
 import FilterCheckbox from './Filters/CheckBox'
 import FilterRadioBox from './Filters/RadioBox'
+import TextSearch from './Filters/TextSearch';
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,7 @@ const LandingPage = () => {
     continents: [],
     price: []
   });
+  const [searchText, setSearchText] = useState("");
   const { Meta } = Card;
 
   useEffect(() => {
@@ -58,7 +60,22 @@ const LandingPage = () => {
       limit,
       filters: newFilters
     };
-
+    
+    getProduct(params);
+  }
+  
+  const updateSearch = (text) => {
+    console.log(text);
+    setSearchText(text);
+    setSkip(0);
+    
+    const params = {
+      skip: 0,
+      limit,
+      filters: filters,
+      searchText: text
+    };
+    
     getProduct(params);
   }
 
@@ -89,6 +106,11 @@ const LandingPage = () => {
             <FilterRadioBox handleFilter={filters => handleFilter(filters, "price")} />
           </Col>
         </Row>
+
+        {/* Search Text */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto'}}>
+          <TextSearch refreshFunction={text => updateSearch(text)} />
+        </div>
 
         { products.length === 0 
             ? (
