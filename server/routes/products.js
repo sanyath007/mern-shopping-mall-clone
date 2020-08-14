@@ -55,6 +55,17 @@ router.get("/", (req, res) => {
         });
 });
 
+router.get("/:id", (req, res) => {
+
+    Product
+        .findOne({ _id: req.params.id})
+        .exec((err, product) => {
+            if(err) return res.status(400).json({ success: false, err })
+
+            return res.status(200).json({ success: true, product })
+        });
+});
+
 router.post("/getProducts", (req, res) => {
     let { order, sortBy, limit, skip, filters, searchText } = req.body;
     

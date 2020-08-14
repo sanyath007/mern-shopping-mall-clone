@@ -83,7 +83,7 @@ const LandingPage = () => {
     <Col lg={6} md={8} xs={24} key={product._id}>
       <Card
         hoverable={true}
-        cover={<ImageSlider images={product.images} />}
+        cover={<a href={`/products/${product._id}`}><ImageSlider images={product.images} /></a>}
       >
         <Meta title={product.title} description={`$${product.price}`} />
       </Card>
