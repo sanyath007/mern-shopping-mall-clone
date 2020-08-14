@@ -18,8 +18,7 @@ If you have problem, feel free to ask me ^^
 
 You can watch the tutorial for this app.
 
-https://www.youtube.com/channel/UCFyXA9x8lpL3EYWeYhj4C4Q?view_as=subscriber
+https://youtu.be/0Lzjx2aqITQ?list=PL9a7QRYt5fqlWKC_wejtfUHYb9uyS8Cxw
 
 
 # mern-shopping-mall-clone
-https://youtu.be/dOg23s3-kEk
